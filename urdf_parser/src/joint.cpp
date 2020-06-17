@@ -415,6 +415,8 @@ bool parseJoint(Joint &joint, TiXmlElement* config)
     joint.type = Joint::PRISMATIC;
   else if (type_str == "fixed")
     joint.type = Joint::FIXED;
+  else if (type_str == "continuum")
+      joint.type = Joint::CONTINUUM;
   else
   {
     CONSOLE_BRIDGE_logError("Joint [%s] has no known type [%s]", joint.name.c_str(), type_str.c_str());
@@ -422,7 +424,7 @@ bool parseJoint(Joint &joint, TiXmlElement* config)
   }
 
   // Get Joint Axis
-  if (joint.type != Joint::FLOATING && joint.type != Joint::FIXED)
+  if (joint.type != Joint::FLOATING && joint.type != Joint::FIXED && joint.type !=Joint::CONTINUUM)
   {
     // axis
     TiXmlElement *axis_xml = config->FirstChildElement("axis");
@@ -601,6 +603,8 @@ bool exportJoint(Joint &joint, TiXmlElement* xml)
     joint_xml->SetAttribute("type", "prismatic");
   else if (joint.type == urdf::Joint::FIXED)
     joint_xml->SetAttribute("type", "fixed");
+  else if (joint.type == urdf::Joint::CONTINUUM)
+      joint_xml->SetAttribute("type", "continuum");
   else
     CONSOLE_BRIDGE_logError("ERROR:  Joint [%s] type [%d] is not a defined type.\n",joint.name.c_str(), joint.type);
 
